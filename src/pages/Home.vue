@@ -7,7 +7,7 @@
 
         <div class="row my-4">
 
-          <div class="col-lg-4 col-md-6 mb-4" v-for="(company, index) in companies.data" :key="items">
+          <div class="col-lg-4 col-md-6 mb-4" v-for="(company, index) in companies.data" :key="index">
             <div class="restaurant-card">
               <a href="vitrine-tenant.html">
                 <img v-if="company.image"
@@ -43,16 +43,21 @@
 
 <script>
 
-  import { mapActions } from 'vuex'
+  import { mapActions, mapState } from 'vuex'
     export default {
       mounted() {
         this.getCompanies()
+            .catch(response => this.$vToastify.error('Falha ao carregar empresas', 'Erro'))
+            
       },
 
       computed:{
-        companies() {
-          return this.$store.state.companies.items
-        }
+        // companies() {
+        //   return this.$store.state.companies.items
+        // }
+        ...mapState ({
+          companies: state => state.companies.items
+        })
       },
 
       methods: {
