@@ -9,7 +9,7 @@
 
           <div class="col-lg-4 col-md-6 mb-4" v-for="(company, index) in companies.data" :key="index">
             <div class="restaurant-card">
-              <a href="vitrine-tenant.html">
+              <a href="#" @click.prevent="goStoreCompany(company)">
                 <img v-if="company.image"
                     class="card-img-top" 
                     :src="company.image" 
@@ -21,9 +21,12 @@
               </a>
               <div class="restaurant-card-body">
                 <h3>
-                  <router-link :to="{name: 'products'}">
+                  <!-- <router-link  :to="{name: 'products', params: {companyFlag: company.flag}}">
                     {{ company.name }}
-                  </router-link>
+                  </router-link> -->
+                  <a href="#" @click.prevent="goStoreCompany(company)">
+                    {{ company.name }}
+                  </a>
                 </h3>
               </div>
             </div>
@@ -43,7 +46,7 @@
 
 <script>
 
-  import { mapActions, mapState } from 'vuex'
+  import { mapActions, mapState, mapMutations } from 'vuex'
     export default {
       mounted() {
         this.getCompanies()
@@ -63,7 +66,17 @@
       methods: {
         ...mapActions([
           'getCompanies'
-        ])
+        ]),
+
+        ...mapMutations({
+          setCompany: 'SET_COMPANY_SELECTED'
+        }),
+
+        goStoreCompany(company) {
+          this.setCompany(company)
+
+          this.$router.push({ name: 'products', params: { companyFlag: company.flag }})
+        }
       }
     }
 </script>
