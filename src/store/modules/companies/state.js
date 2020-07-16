@@ -4,6 +4,10 @@ const state = {
     },
     companySelected: {
         name: ''
+    },
+
+    categoriesCompanySelected: {
+        data: []
     }
 }
 

@@ -5,9 +5,15 @@
 
         <h1 class="my-4 title-tenant">{{ company.name }}</h1>
         <div class="list-group">
-          <a href="#" class="list-group-item active">Categoria 1</a>
-          <a href="#" class="list-group-item">Categoria 2</a>
-          <a href="#" class="list-group-item">Categoria 3</a>
+          
+          <a href="#" 
+             class="list-group-item" 
+             v-for="(category, index) in categories.data" :key="index">
+            
+            {{ category.name }}
+          
+           </a>
+          
         </div>
 
       </div>
@@ -127,7 +133,7 @@
 
 <script>
 
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   props: ['companyFlag'],
@@ -136,12 +142,23 @@ export default {
     if(this.company.name === '') {
       return this.$router.push( { name: 'home' } )
     }
+
+    this.getCategoriesByCompany(this.company.uuid)
+            .catch(response => this.$vToastify.error('Falha ao carregar as Categorias', 'Erro'))
+        
   },
 
   computed: {
     ...mapState({
-      company: state => state.companies.companySelected
+      company: state => state.companies.companySelected,
+      categories: state => state.companies.categoriesCompanySelected 
     }),
-  }
+  },
+
+  methods: {
+    ...mapActions([
+      'getCategoriesByCompany'
+    ])
+  },
 }
 </script>
