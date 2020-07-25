@@ -5,10 +5,15 @@
 
         <h1 class="my-4 title-tenant">{{ company.name }}</h1>
         <div class="list-group">
-          
+          <a href="#"
+            :class="['list-group-item', categoryInFilter('')]"
+            @click.prevent="filterByCategory('')">
+            Todas          
+          </a>          
           <a href="#" 
-             class="list-group-item" 
-             v-for="(category, index) in categories.data" :key="index">
+             v-for="(category, index) in categories.data" :key="index"
+             :class="['list-group-item', categoryInFilter(category.identify)]"
+             @click.prevent="filterByCategory(category.identify)">
             
             {{ category.name }}
           
@@ -23,15 +28,21 @@
 
         <div class="row my-4">
 
-          <div class="col-lg-4 col-md-6 mb-4">
+          <div v-if="company.products.data.lenth === 0">
+            <h2>Nenhum Producto Cadastrado!</h2>
+          </div>
+
+          <div class="col-lg-4 col-md-6 mb-4" v-for="(product, index) in company.products.data" :key="index">
             <div class="card h-100">
-              <a href="#"><img class="card-img-top" src="imgs/pizza.png" alt=""></a>
+              <a href="#">
+                <img class="card-img-top" :src="product.image" alt="">
+              </a>
               <div class="card-body">
                 <h4 class="card-title">
-                  <a href="#">Pizza</a>
+                  <a href="#"> {{ product.name }}</a>
                 </h4>
-                <h5>R$ 12,99</h5>
-                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!</p>
+                <h5>R$ {{ product.price }}</h5>
+                <p class="card-text">{{ product.description }}</p>
               </div>
               <div class="card-footer card-footer-custom">
                 <router-link :to="{name: 'cart'}">
@@ -39,87 +50,8 @@
                 </router-link>
               </div>
             </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 mb-4">
-            <div class="disabled card h-100">
-              <a href="#"><img class="card-img-top" src="imgs/acai.png" alt=""></a>
-              <div class="card-body">
-                <h4 class="card-title">
-                  <a href="#">Açai na Tijela</a>
-                </h4>
-                <h5>R$ 12,99</h5>
-                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur! Lorem ipsum dolor sit amet.</p>
-              </div>
-              <div class="card-footer card-footer-custom">
-                <a href="carrinho.html">Adicionar no Carrinho <i class="fas fa-cart-plus"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card h-100">
-              <a href="#"><img class="card-img-top" src="imgs/japonesa.png" alt=""></a>
-              <div class="card-body">
-                <h4 class="card-title">
-                  <a href="#">Item Three</a>
-                </h4>
-                <h5>R$ 12,99</h5>
-                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!</p>
-              </div>
-              <div class="card-footer card-footer-custom">
-                <a href="carrinho.html">Adicionar no Carrinho <i class="fas fa-cart-plus"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card h-100">
-              <a href="#"><img class="card-img-top" src="imgs/lanches.png" alt=""></a>
-              <div class="card-body">
-                <h4 class="card-title">
-                  <a href="#">Sanduíche</a>
-                </h4>
-                <h5>R$ 12,99</h5>
-                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!</p>
-              </div>
-              <div class="card-footer card-footer-custom">
-                <a href="carrinho.html">Adicionar no Carrinho <i class="fas fa-cart-plus"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card h-100">
-              <a href="#"><img class="card-img-top" src="imgs/pizza.png" alt=""></a>
-              <div class="card-body">
-                <h4 class="card-title">
-                  <a href="#">Pizza Vegana</a>
-                </h4>
-                <h5>R$ 12,99</h5>
-                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur! Lorem ipsum dolor sit amet.</p>
-              </div>
-              <div class="card-footer card-footer-custom">
-                <a href="carrinho.html">Adicionar no Carrinho <i class="fas fa-cart-plus"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card h-100">
-              <a href="#"><img class="card-img-top" src="imgs/acai.png" alt=""></a>
-              <div class="card-body">
-                <h4 class="card-title">
-                  <a href="#">Açai Bomba</a>
-                </h4>
-                <h5>R$ 12,99</h5>
-                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!</p>
-              </div>
-              <div class="card-footer card-footer-custom">
-                <a href="carrinho.html">Adicionar no Carrinho <i class="fas fa-cart-plus"></i></a>
-              </div>
-            </div>
-          </div>
+          </div> 
+    
 
         </div>
         <!-- /.row -->
@@ -145,7 +77,12 @@ export default {
 
     this.getCategoriesByCompany(this.company.uuid)
             .catch(response => this.$vToastify.error('Falha ao carregar as Categorias', 'Erro'))
-        
+   
+  // this.getProductsByCompany(this.company.uuid)
+    //        .catch(response => this.$vToastify.error('Falha ao carregar os Produtos', 'Erro'))        
+    this.loadProducts()
+
+            
   },
 
   computed: {
@@ -155,10 +92,43 @@ export default {
     }),
   },
 
+  data() {
+    return {
+      filters: {
+        category: ''
+      }
+    }
+  },
+
   methods: {
     ...mapActions([
-      'getCategoriesByCompany'
-    ])
+      'getCategoriesByCompany',
+      'getProductsByCompany'
+    ]),
+
+    loadProducts () {
+      const params = {
+        token_company: this.company.uuid,
+      }
+
+      if(this.filters.category){
+        params.categories = [
+          this.filters.category 
+        ]
+      }
+
+      this.getProductsByCompany(params)
+            .catch(response => this.$vToastify.error('Falha ao carregar os Produtos', 'Erro'))        
+    },
+
+    filterByCategory(identify){
+      this.filters.category = identify
+      this.loadProducts()
+    },
+
+    categoryInFilter(identify){
+      return identify === this.filters.category ? 'active' : ''
+    }
   },
 }
 </script>

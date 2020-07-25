@@ -3,7 +3,10 @@ const state = {
         data: []
     },
     companySelected: {
-        name: ''
+        name: '',
+        products: {
+            data: []
+        }
     },
 
     categoriesCompanySelected: {
