@@ -33,7 +33,7 @@
           </div>
 
           <div class="col-lg-4 col-md-6 mb-4" v-for="(product, index) in company.products.data" :key="index">
-            <div class="card h-100">
+            <div :class="['card', 'h-100', {'disabel' : productInCart(product)}]">
               <a href="#">
                 <img class="card-img-top" :src="product.image" alt="">
               </a>
@@ -45,9 +45,9 @@
                 <p class="card-text">{{ product.description }}</p>
               </div>
               <div class="card-footer card-footer-custom">
-                <router-link :to="{name: 'cart'}">
-                  Adicionar no Carrinho <i class="fas fa-cart-plus"></i>
-                </router-link>
+                    <a href="#" @click.prevent="addProdCart(product)">
+                      Adicionar no Carrinho <i class="fas fa-cart-plus"></i>
+                    </a>
               </div>
             </div>
           </div> 
@@ -65,7 +65,7 @@
 
 <script>
 
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 
 export default {
   props: ['companyFlag'],
@@ -88,7 +88,12 @@ export default {
   computed: {
     ...mapState({
       company: state => state.companies.companySelected,
-      categories: state => state.companies.categoriesCompanySelected 
+      categories: state => state.companies.categoriesCompanySelected, 
+      productsCart: state => state.cart.products
+    }),
+    
+    ...mapMutations({
+      addProdCart: 'ADD_PRODUCT_CART'
     }),
   },
 
@@ -128,6 +133,17 @@ export default {
 
     categoryInFilter(identify){
       return identify === this.filters.category ? 'active' : ''
+    },
+
+    productInCart(product){
+      let inCart = false
+
+      this.productsCart.map((prodCart, index) => {
+        if (prodCart.identify === product.identify)
+          inCart = true
+      })
+
+      return inCart
     }
   },
 }

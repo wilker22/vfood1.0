@@ -12,7 +12,7 @@
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item active">
                             <router-link :to="{name: 'cart'}" class="nav-link">
-                                <i class="fas fa-shopping-cart"></i> (2)
+                                <i class="fas fa-shopping-cart"></i> ({{ products.length }})
                             </router-link>
                         </li>
 
@@ -27,3 +27,15 @@
         </nav>
       </header>
 </template>
+
+<script>
+    import { mapState } from 'vuex'
+
+    export default {
+        computed: {
+            ...mapState({
+                productsCart: state => state.cart.products
+            })
+        },
+    }
+</script>
