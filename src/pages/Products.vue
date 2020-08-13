@@ -33,7 +33,7 @@
           </div>
 
           <div class="col-lg-4 col-md-6 mb-4" v-for="(product, index) in company.products.data" :key="index">
-            <div :class="['card', 'h-100', {'disabel' : productInCart(product)}]">
+            <div :class="['card', 'h-100', {'disabled' : productInCart(product)}]">
               <a href="#">
                 <img class="card-img-top" :src="product.image" alt="">
               </a>

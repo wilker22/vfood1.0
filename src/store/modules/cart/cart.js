@@ -13,7 +13,7 @@ export default{
             })
         },
 
-        REMOVE_PRODUCT_CART (state, product) {
+        REMOVE_PROD_CART (state, product) {
             state.products = state.products.filter((prodCart, index) => {
                 return prodCart.identify !== product.identify
             })

@@ -12,7 +12,7 @@
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item active">
                             <router-link :to="{name: 'cart'}" class="nav-link">
-                                <i class="fas fa-shopping-cart"></i> ({{ products.length }})
+                                <i class="fas fa-shopping-cart"></i> ({{ productsCart.length }})
                             </router-link>
                         </li>
 
